@@ -3,11 +3,11 @@
   <title>Hexo</title>
   
   
-  <link href="https://hexo_blog.git/atom.xml" rel="self"/>
+  <link href="https://sandrala0413.git/atom.xml" rel="self"/>
   
-  <link href="https://hexo_blog.git/"/>
+  <link href="https://sandrala0413.git/"/>
   <updated>2025-03-09T17:33:01.979Z</updated>
-  <id>https://hexo_blog.git/</id>
+  <id>https://sandrala0413.git/</id>
   
   <author>
     <name>Sandrala Tsai</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>test</title>
-    <link href="https://hexo_blog.git/2025/03/10/test/"/>
-    <id>https://hexo_blog.git/2025/03/10/test/</id>
+    <link href="https://sandrala0413.git/2025/03/10/test/"/>
+    <id>https://sandrala0413.git/2025/03/10/test/</id>
     <published>2025-03-09T17:32:24.000Z</published>
     <updated>2025-03-09T17:33:01.979Z</updated>
     
@@ -38,8 +38,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="https://hexo_blog.git/2025/03/10/hello-world/"/>
-    <id>https://hexo_blog.git/2025/03/10/hello-world/</id>
+    <link href="https://sandrala0413.git/2025/03/10/hello-world/"/>
+    <id>https://sandrala0413.git/2025/03/10/hello-world/</id>
     <published>2025-03-09T17:26:15.712Z</published>
     <updated>2025-03-09T17:26:15.713Z</updated>
     

@@ -6,7 +6,7 @@
   <link href="https://sandrala0413.git/atom.xml" rel="self"/>
   
   <link href="https://sandrala0413.git/"/>
-  <updated>2025-05-05T17:29:30.040Z</updated>
+  <updated>2025-05-07T06:00:52.529Z</updated>
   <id>https://sandrala0413.git/</id>
   
   <author>
@@ -15,6 +15,60 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>UVa 490 - Rotating Sentences 解題紀錄</title>
+    <link href="https://sandrala0413.git/post/uva-490.html"/>
+    <id>https://sandrala0413.git/post/uva-490.html</id>
+    <published>2025-05-06T19:25:13.000Z</published>
+    <updated>2025-05-07T06:00:52.529Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="📘-題目簡述"><a href="#📘-題目簡述" class="headerlink" title="📘 題目簡述"></a>📘 題目簡述</h2><p>把輸入檔案由最後一行開始，由上至下轉置輸出</p><hr><h2 id="📥-輸入格式"><a href="#📥-輸入格式" class="headerlink" title="📥 輸入格式"></a>📥 輸入格式</h2><p>給定最多 100 行 sentence ，每行不超過 100 個字元</p><h2 id="📤-輸出格式"><a href="#📤-輸出格式" class="headerlink" title="📤 輸出格式"></a>📤 輸出格式</h2><p>從最後一行由左至右垂直輸出</p><h2 id="📌-題目範例輸入"><a href="#📌-題目範例輸入" class="headerlink" title="📌 題目範例輸入"></a>📌 題目範例輸入</h2><p>Rene Decartes once said,<br>“I think, therefore I am.”</p><h2 id="📌-題目範例輸出"><a href="#📌-題目範例輸出" class="headerlink" title="📌 題目範例輸出"></a>📌 題目範例輸出</h2><p>“R<br>Ie<br>n<br>te<br>h<br>iD<br>ne<br>kc<br>,a<br>r<br>tt<br>he<br>es<br>r<br>eo<br>fn<br>oc<br>re<br>e<br>s<br>Ia<br>i<br>ad<br>m,<br>.<br>“</p><hr><h2 id="解題思路"><a href="#解題思路" class="headerlink" title="解題思路"></a>解題思路</h2><p>直覺做，只要把每行輸入都用空白補成相同長度，輸出就很簡單了</p><h2 id="Java程式碼實作"><a href="#Java程式碼實作" class="headerlink" title="Java程式碼實作"></a>Java程式碼實作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*;</span><br><span class="line"></span><br><span class="line">public class Main&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        Scanner in = new Scanner(System.in);</span><br><span class="line"></span><br><span class="line">        ArrayList&lt;String&gt; line = new ArrayList&lt;&gt;();</span><br><span class="line">        String tmp;</span><br><span class="line">        int max = 0;</span><br><span class="line">        while(in.hasNext())&#123;</span><br><span class="line">            tmp = in.nextLine();</span><br><span class="line">            line.add(tmp);</span><br><span class="line">            if(tmp.length() &gt; max)  max = tmp.length();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for(int i = 0; i &lt; line.size(); i++)&#123;</span><br><span class="line">            tmp = line.get(i);</span><br><span class="line">            while(tmp.length() &lt; max)&#123;</span><br><span class="line">                tmp += &quot; &quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            line.set(i, tmp);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for(int i = 0; i &lt; max; i++)&#123;</span><br><span class="line">            for(int j = line.size() - 1; j &gt;= 0; j--)&#123;</span><br><span class="line">                System.out.print(line.get(j).charAt(i));</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(&quot;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;📘-題目簡述&quot;&gt;&lt;a href=&quot;#📘-題目簡述&quot; class=&quot;headerlink&quot; title=&quot;📘 題目簡述&quot;&gt;&lt;/a&gt;📘 題目簡述&lt;/h2&gt;&lt;p&gt;把輸入檔案由最後一行開始，由上至下轉置輸出&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;📥-輸入格式&quot;&gt;&lt;a</summary>
+      
+    
+    
+    
+    <category term="UVa-⭐" scheme="https://sandrala0413.git/categories/UVa-%E2%AD%90/"/>
+    
+    
+    <category term="Java" scheme="https://sandrala0413.git/tags/Java/"/>
+    
+    <category term="UVa" scheme="https://sandrala0413.git/tags/UVa/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>UVa 245 Uncompress 解題紀錄</title>
+    <link href="https://sandrala0413.git/post/uva-245.html"/>
+    <id>https://sandrala0413.git/post/uva-245.html</id>
+    <published>2025-05-06T19:25:04.000Z</published>
+    <updated>2025-05-07T03:03:52.897Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="📝-題目簡介"><a href="#📝-題目簡介" class="headerlink" title="📝 題目簡介"></a>📝 題目簡介</h2><p>把壓縮過的檔案還原，壓縮檔案包含 word 和數字，未壓縮檔沒有數字。壓縮檔中，若遇到先前沒有出現過的 word ，則將該 word 放到 list 的最前面(index 從 1 開始)；若遇到之前出現過的 word ，則用 list 中該 word 的 index 代替，並將該 word 移到 list 最前面；遇到非英文 or 數字的字元直接輸出</p><hr><h2 id="📌-題目輸入格式"><a href="#📌-題目輸入格式" class="headerlink" title="📌 題目輸入格式"></a>📌 題目輸入格式</h2><ul><li>沒有 word 超過 50 字元</li><li>大小寫是有區分的<ul><li>eg. <strong>abc</strong> 不等於 <strong>Abc</strong></li></ul></li><li>輸入 0 時結束</li></ul><h2 id="📌-題目輸出格式"><a href="#📌-題目輸出格式" class="headerlink" title="📌 題目輸出格式"></a>📌 題目輸出格式</h2><p>輸出解壓縮後的檔案</p><h2 id="📌-題目範例輸入"><a href="#📌-題目範例輸入" class="headerlink" title="📌 題目範例輸入"></a>📌 題目範例輸入</h2><p>Dear Sally,<br>Please, please do it–1 would 4<br>Mary very, 1 much. And 4 6<br>8 everything in 5’s power to make<br>14 pay off for you.<br>– Thank 2 18 18–<br>0</p><h2 id="📌-題目範例輸出"><a href="#📌-題目範例輸出" class="headerlink" title="📌 題目範例輸出"></a>📌 題目範例輸出</h2><p>Dear Sally,<br>Please, please do it–it would please<br>Mary very, very much. And Mary would<br>do everything in Mary’s power to make<br>it pay off for you.<br>– Thank you very much–</p><hr><h2 id="解題思路"><a href="#解題思路" class="headerlink" title="解題思路"></a>解題思路</h2><p>用 ArrayList&lt;&gt; 存取 list ，因為可以直接指定要拿取、刪除、新增的 index ，我覺得拿來實作這題很方便。<br>當遇到字元是字母時就繼續讀取下去，存到字串中，直到讀取到不是字母的字元，再把該 word 存到 list 中；數字同理，存取到完整數字後轉為 index 到 list 中取出 word ，再把該 word 移到 list 最前面</p><h2 id="💻-Java-程式碼實作"><a href="#💻-Java-程式碼實作" class="headerlink" title="💻 Java 程式碼實作"></a>💻 Java 程式碼實作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*;</span><br><span class="line"></span><br><span class="line">public class Main&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        Scanner in = new Scanner(System.in);</span><br><span class="line"></span><br><span class="line">        ArrayList&lt;String&gt; token = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        while(true)&#123;</span><br><span class="line">            String str = in.nextLine();</span><br><span class="line">            if(str.equals(&quot;0&quot;)) break;</span><br><span class="line"></span><br><span class="line">            String tmp = &quot;&quot;;</span><br><span class="line">            for(int i = 0; i &lt; str.length();)&#123;</span><br><span class="line">                char ch = str.charAt(i);</span><br><span class="line">                if(Character.isLetter(ch))&#123;</span><br><span class="line">                    while(i &lt; str.length() &amp;&amp; Character.isLetter(str.charAt(i)))&#123;</span><br><span class="line">                        tmp += str.charAt(i++);</span><br><span class="line">                    &#125;</span><br><span class="line">                    System.out.print(tmp);</span><br><span class="line">                    token.add(0, tmp);</span><br><span class="line">                    tmp = &quot;&quot;;</span><br><span class="line">                &#125;</span><br><span class="line">                else if(Character.isDigit(ch))&#123;</span><br><span class="line">                    int index = 0;</span><br><span class="line">                    while(i &lt; str.length() &amp;&amp; Character.isDigit(str.charAt(i)))&#123;</span><br><span class="line">                        index = index * 10 + str.charAt(i++) - &#x27;0&#x27;; </span><br><span class="line">                    &#125;</span><br><span class="line">                    String s = token.get(index-1);</span><br><span class="line">                    System.out.print(s);</span><br><span class="line">                    token.remove(index - 1);</span><br><span class="line">                    token.add(0, s);</span><br><span class="line">                &#125;</span><br><span class="line">                else&#123;</span><br><span class="line">                    System.out.print(ch);</span><br><span class="line">                    i++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(&quot;&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;📝-題目簡介&quot;&gt;&lt;a href=&quot;#📝-題目簡介&quot; class=&quot;headerlink&quot; title=&quot;📝 題目簡介&quot;&gt;&lt;/a&gt;📝 題目簡介&lt;/h2&gt;&lt;p&gt;把壓縮過的檔案還原，壓縮檔案包含 word 和數字，未壓縮檔沒有數字。壓縮檔中，若遇到先前沒有出現過</summary>
+      
+    
+    
+    
+    <category term="UVa-⭐⭐" scheme="https://sandrala0413.git/categories/UVa-%E2%AD%90%E2%AD%90/"/>
+    
+    
+    <category term="Java" scheme="https://sandrala0413.git/tags/Java/"/>
+    
+    <category term="UVa" scheme="https://sandrala0413.git/tags/UVa/"/>
+    
+  </entry>
   
   <entry>
     <title>UVa 151 - Power Crisis 解題紀錄</title>

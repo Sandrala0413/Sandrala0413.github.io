@@ -43,23 +43,6 @@
   </entry>
   
   <entry>
-    <title>Nonogram 基礎實作</title>
-    <link href="https://sandrala0413.git/post/nonogram.html"/>
-    <id>https://sandrala0413.git/post/nonogram.html</id>
-    <published>2025-09-11T15:54:11.000Z</published>
-    <updated>2025-09-24T20:34:56.827Z</updated>
-    
-    
-    
-    
-    <category term="實作紀錄" scheme="https://sandrala0413.git/categories/%E5%AF%A6%E4%BD%9C%E7%B4%80%E9%8C%84/"/>
-    
-    
-    <category term="Nonogram" scheme="https://sandrala0413.git/tags/Nonogram/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Docker 新手初探筆記</title>
     <link href="https://sandrala0413.git/post/docker-introduction.html"/>
     <id>https://sandrala0413.git/post/docker-introduction.html</id>
@@ -162,6 +145,30 @@
     <category term="Java" scheme="https://sandrala0413.git/tags/Java/"/>
     
     <category term="UVa-⭐" scheme="https://sandrala0413.git/tags/UVa-%E2%AD%90/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>實作筆記｜c++ 實作 Nonogram 演算法</title>
+    <link href="https://sandrala0413.git/post/nonogram.html"/>
+    <id>https://sandrala0413.git/post/nonogram.html</id>
+    <published>2025-05-11T15:54:11.000Z</published>
+    <updated>2025-10-03T20:08:04.859Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前高效能運算課堂時老師提到了一個蠻有趣的論文，是由陽明交大資工系吳毅成教授團隊發表的 —— <strong>An Efficient Approach to Solving Nonograms (Wu et al., 2013)</strong><br>內容主要是提出一個更快的演算法來處理 Nonogram（一種黑白格填點遊戲）裡的 line solving(一行一行解題)，再搭配幾個 Fully Probing (FP) 的小技巧，把能確定的格子盡量先塗掉，最後才交給 backtracking</p><p>系上一直都有學長姊在研究這個領域，也贏了很多次TCGA、ICGA電腦對局研討會的Nonogram冠軍，因為看著蠻好玩的就好奇動手把論文的方法實作了一下，用的是TCGA的標準。本來以為是小插曲，沒想到後來意外成為我國科會大專生研究計畫的主題哈哈，這篇除了是實作筆記也當作我再一次整理整個演算法的思路</p><p>我的程式是根據後面有提到的TCGA規則寫的，有興趣的也可以到 <a href="https://github.com/Sandrala0413/Nonogram-SimpleVersion">github</a> 看看我的程式碼~~~</p><hr><h2 id="論文的核心想法"><a href="#論文的核心想法" class="headerlink" title="論文的核心想法"></a>論文的核心想法</h2><p>論文中的解題方法是屬於單格導向的解題模式(現在也有如我正在研究的區塊挪移、邏輯規則求解等其他方法)。裡面演算法主要分為三個部分：</p><ol><li>Propagate: 基於動態規劃，反覆對單行或列進行猜測求解，直至不再有進展</li><li>Fully Probing(FP): 針對尚未求得解的格子，分別猜測填黑或填白，然後再執行Propagate，檢驗何者會與目前盤面及線索相衝突(則另一不會導致衝突者，就是正確的解答方向)，若兩者都不會導致衝突，則填黑和填白的擴展後盤面取交集，即是可新求得解的格子</li><li>Backtracking: 最後再以回溯搜尋法來求得所有剩餘格子的解答(其中會再反覆用到前一部分的Fully Probing方法)</li></ol><h3 id="1-Line-Solving-Propagation-with-DP"><a href="#1-Line-Solving-Propagation-with-DP" class="headerlink" title="1. Line Solving &amp; Propagation with DP"></a>1. Line Solving &amp; Propagation with DP</h3><p>傳統做法大多靠規則（rule-based）或 SAT&#x2F;ILP 轉換，速度或正確性都有限。<br>這篇論文的重點是 <strong>DP line solving</strong>：針對一條 row&#x2F;col，快速判斷哪些格子一定是黑、一定是白。 </p><p>論文中 DP 有幾個主要函數：  </p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Fix(i, j) -&gt; 迴圈，驗證Si是否有解(fixble)</span><br><span class="line">Fix0(i, j) -&gt; 設si = 0(空白格)</span><br><span class="line">Fix1(i, j) -&gt; 設si = 1(黑格)</span><br></pre></td></tr></table></figure><p>完整pseudo code<br><img src="/../imgs/image8.jpg" alt="image"><br>其中</p><ul><li>s[i] &#x3D; line 的第 i 個 cell 狀態（0 &#x3D; 白, 1 &#x3D; 黑, u &#x3D; 未知）</li><li>d[j] &#x3D; 第 j 個 clue 的黑塊長度</li><li>σ(d[j]) &#x3D; 長度為 d[j] 的黑塊 pattern（連續 d[j] 個黑格）</li><li>segment(s[i]-d[j] .. s[i]) &#x3D; 從 i-d[j] 到 i 的 substring</li></ul><p>Fix(l, k) 時間複雜度是 <strong>O(kl)</strong></p><h4 id="The-line-solving-problem：找到S的maximal-painting-S’"><a href="#The-line-solving-problem：找到S的maximal-painting-S’" class="headerlink" title="The line-solving problem：找到S的maximal painting S’"></a>The line-solving problem：找到S的maximal painting S’</h4><p>這裡的S &#x3D; s<del>1</del>s<del>2</del> … s<del>l</del>，代表該line和線索相符的string，S’則是S朝解更進一步的記號，所以這個部分的目標就是找到S最大的解(也就是全部都被標記上0、1、u，且符合線索)</p><p>論文裡用到的函數稱為Paint，跟前面的Fix差別在於，Fix是試試看這樣填會不會有錯，Paint是真正將解填進去格子(填了就不能返回)<br>Fix會以一整條line來看，呼叫Fix來判斷是否有解<br><img src="/../imgs/image9.jpg" alt="image"><br>主要用到的填點技術是<code>Merge</code>，當Fix0、Fix1都成立時，代表那個點填0 or 1都行，就可以取當下兩個盤面的交集點，也就是可以確定的解，其他則依然unknown</p><p>Paint(l, k)時間複雜度為<strong>O(kl^2)</strong></p><h4 id="Propagation：把row、col的線索拿出來更進一步解"><a href="#Propagation：把row、col的線索拿出來更進一步解" class="headerlink" title="Propagation：把row、col的線索拿出來更進一步解"></a>Propagation：把row、col的線索拿出來更進一步解</h4><p><img src="/../imgs/image10.png" alt="image"></p><h3 id="2-Fully-Probing-FP"><a href="#2-Fully-Probing-FP" class="headerlink" title="2. Fully Probing (FP)"></a>2. Fully Probing (FP)</h3><p>光靠 DP，還是會留下很多「未知」格子。<br>FP 的概念就是：在propagate完後先隨便挑一格u，假裝猜其是黑&#x2F;白 → propagate檢查是否conflict → 看能不能推出新資訊。<br>論文裡面提出了三種FP演算法</p><ul><li><p>FP1：最簡單，逐格嘗試</p></li><li><p>FP2：加上「反推（contrapositive）」，推出更多隱含關係</p></li><li><p>FP3：進一步做類似 2-SAT 的關聯推理</p></li></ul><p>一個簡單的 FP1 片段，有興趣的人可以去翻翻原論文：<br><img src="/../imgs/image11.png" alt="image"></p><p><img src="/../imgs/image12.png" alt="image"><br>其中</p><ul><li>G<del>p,0</del>：猜p &#x3D; 0後的牌面</li><li>G<del>p,1</del>：猜p &#x3D; 1後的牌面</li></ul><p>這邊的 PROBE 裡的<code>CONFLICT</code>不是代表無解，而是因為前面Backtracking時可能就猜錯了所以導致無解(因為Backtracking是同時猜測多個點)<br>而 FP1 中迴圈裡是否要有那個<code>break</code>也是一個可以探討的問題，因為多了這個break出去更新牌面是有可能增加更多解，但也可能會增加計算量導致效率變低</p><h3 id="3-Backtracking-選點策略"><a href="#3-Backtracking-選點策略" class="headerlink" title="3. Backtracking + 選點策略"></a>3. Backtracking + 選點策略</h3><p>當 FP 再也解不出點，就得進入Backtracking回溯<br>這裡選<strong>哪一格來猜</strong>很重要，好的 heuristic 能大幅減少遞迴深度，所以選點策略也是Nonogram研究中值得拿出來探討的事，論文裡也提出了6種選點策略，有趣的是交大自己實測最快的選點策略跟我們系上學長姐實驗出來的完全不一樣，所以這個議題還是蠻好玩的<br><img src="/../imgs/image13.png" alt="alt text"></p><h3 id="Nonogram競賽規則-TCGA"><a href="#Nonogram競賽規則-TCGA" class="headerlink" title="Nonogram競賽規則(TCGA)"></a>Nonogram競賽規則(TCGA)</h3><p>TCGA是台灣電腦對局研討會，每年大約5月時除了會發表電腦對局相關的研究成果，也會舉辦電腦對局競賽，其中就有一項是Nonogram，規則如下</p><ul><li>每題題目編號前有 <strong>$</strong> ，後面會跟著線索</li><li>每個題目為25*25之大小Nonogram盤面，線索共有50行，前25行代表row的線索(上到下)，後25行代表col的線索(左到右)</li><li>solution需存於25*25大小矩陣， <strong>0</strong> 代表空白格， <strong>1</strong> 代表黑格</li><li>每個線索跟解之間需用TAB相隔</li><li>所有程式都會跑在同一台電腦，且只能使用單顆CPU</li><li>程式只能按照題目順序解題，不能跳題</li><li>一個題目可能有多個解，只需解出其中一個就可以</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;之前高效能運算課堂時老師提到了一個蠻有趣的論文，是由陽明交大資工系吳毅成教授團隊發表的 —— &lt;strong&gt;An Efficient Approach to Solving Nonograms (Wu et al., 2013)&lt;/strong&gt;&lt;br&gt;內容主要是提出一個</summary>
+      
+    
+    
+    
+    <category term="實作紀錄" scheme="https://sandrala0413.git/categories/%E5%AF%A6%E4%BD%9C%E7%B4%80%E9%8C%84/"/>
+    
+    
+    <category term="Nonogram" scheme="https://sandrala0413.git/tags/Nonogram/"/>
     
   </entry>
   
